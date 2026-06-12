@@ -24,4 +24,8 @@ Construire sans détruire 🌿
 Tags
 
 gabon, green-economy, sustainability, ui-ux, react, vite, tailwindcss, figma, environment, ecology
+
+## Publication GitHub Pages
+
+Le site peut être publié via GitHub Pages en utilisant le dossier `docs/` généré à partir de `dist/`. Exécutez `npm run build` pour mettre à jour `docs/`, puis configurez GitHub Pages sur la branche `main` avec le dossier racine `docs/`.
   
