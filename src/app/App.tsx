@@ -8,8 +8,8 @@ function Screen1() {
   return (
     <div>
       <div className="mg-hero">
-        <div style={{ marginBottom: 16, display: "flex", justifyContent: "center" }}>
-          <img src={logoImg} alt="Mbolo Green" style={{ width: 100, height: 100, objectFit: "contain", borderRadius: "50%", background: "rgba(255,255,255,0.1)" }} />
+        <div className="mg-hero-logo-wrap">
+          <img src={logoImg} alt="Mbolo Green" className="mg-hero-logo-img" />
         </div>
         <div className="mg-slogan">CONSTRUIRE SANS DÉTRUIRE</div>
         <h1 className="mg-hero-title">Bienvenue sur Mbolo Green</h1>
@@ -30,7 +30,7 @@ function Screen1() {
           { icon: "🏢", num: "150", label: "Initiatives référencées" },
         ].map((s) => (
           <div key={s.label} className="mg-stat-item">
-            <div style={{ fontSize: 24, marginBottom: 4 }}>{s.icon}</div>
+            <div className="mg-stat-icon">{s.icon}</div>
             <div className="mg-stat-num">{s.num}</div>
             <div className="mg-stat-label">{s.label}</div>
           </div>
@@ -106,16 +106,16 @@ function Screen2() {
                 type="checkbox"
                 checked={activeZones[key]}
                 onChange={() => toggleZone(key)}
-                style={{ accentColor: color, width: 14, height: 14 }}
+                className={`mg-filter-checkbox mg-zone-${key}`}
               />
-              <span style={{ display: "flex", alignItems: "center", gap: 5 }}>
-                <span style={{ display: "inline-block", width: 10, height: 10, borderRadius: 2, background: color, flexShrink: 0 }} />
+              <span className="mg-filter-label">
+                <span className={`mg-filter-dot mg-zone-${key}`} />
                 {label}
               </span>
             </label>
           ))}
 
-          <div style={{ marginTop: 16, paddingTop: 12, borderTop: "1px solid #e8efdd" }}>
+          <div className="mg-filter-group">
             <div className="mg-filter-title">Initiatives</div>
             {[
               { color: "#647D00", label: "Reboisement" },
@@ -123,8 +123,8 @@ function Screen2() {
               { color: "#f0a500", label: "Agriculture" },
               { color: "#4ab8d4", label: "Énergie" },
             ].map((l) => (
-              <div key={l.label} style={{ fontSize: 11, color: "#666", display: "flex", alignItems: "center", gap: 5, marginBottom: 5 }}>
-                <span style={{ display: "inline-block", width: 10, height: 10, borderRadius: "50%", background: l.color }} />
+              <div key={l.label} className={`mg-init-item mg-init-${l.label.toLowerCase().replace(/\s+/g, "-").replace(/é/g, "e").replace(/ô/g, "o")}`}>
+                <span className="mg-init-dot" />
                 {l.label}
               </div>
             ))}
@@ -134,13 +134,13 @@ function Screen2() {
             const pin = pins.find(p => p.id === selectedPin)!;
             const zone = ZONES.find(z => z.key === pin.zone)!;
             return (
-              <div style={{ marginTop: 14, paddingTop: 12, borderTop: "1px solid #e8efdd" }}>
+              <div className="mg-selection-group">
                 <div className="mg-filter-title">Sélection</div>
-                <div style={{ background: "#f0f7e0", borderRadius: 8, padding: "8px 10px" }}>
-                  <div style={{ fontFamily: "Poppins,sans-serif", fontSize: 12, fontWeight: 700, color: "#222" }}>{pin.label}</div>
-                  <div style={{ fontSize: 11, color: "#555", marginTop: 2 }}>{pin.info}</div>
-                  <div style={{ fontSize: 10, color: zone.color, marginTop: 4, fontWeight: 600 }}>● {zone.label}</div>
-                  <button onClick={() => setSelectedPin(null)} style={{ marginTop: 6, fontSize: 10, color: "#888", background: "none", border: "none", cursor: "pointer", padding: 0 }}>✕ fermer</button>
+                <div className="mg-selection-card">
+                  <div className="mg-selection-label">{pin.label}</div>
+                  <div className="mg-selection-info">{pin.info}</div>
+                  <div className={`mg-selection-zone mg-zone-${zone.key}`}>● {zone.label}</div>
+                  <button onClick={() => setSelectedPin(null)} className="mg-selection-close">✕ fermer</button>
                 </div>
               </div>
             );
@@ -228,10 +228,10 @@ function Screen2() {
               const zone = ZONES.find(z => z.key === pin.zone)!;
               const isSelected = selectedPin === pin.id;
               return (
-                <g key={pin.id} style={{ cursor: "pointer" }} onClick={() => setSelectedPin(isSelected ? null : pin.id)}>
+                <g key={pin.id} className="mg-pin" onClick={() => setSelectedPin(isSelected ? null : pin.id)}>
                   <circle cx={pin.cx} cy={pin.cy} r={isSelected ? 11 : 8}
                     fill={zone.color} stroke="#fff" strokeWidth="2"
-                    style={{ transition: "r 0.15s" }} />
+                    className="mg-pin-circle" />
                   {isSelected && <circle cx={pin.cx} cy={pin.cy} r="15" fill="none" stroke={zone.color} strokeWidth="1.5" opacity="0.5" />}
                   <text x={pin.cx + 14} y={pin.cy + 4}
                     fontFamily="Poppins,sans-serif" fontSize="10" fill="#1a2e00" fontWeight="700">{pin.label}</text>
@@ -252,14 +252,14 @@ function Screen2() {
           </svg>
 
           {/* Badge info */}
-          <div style={{ position: "absolute", top: 10, right: 10, background: "rgba(255,255,255,0.96)", borderRadius: 8, padding: "8px 12px", border: "1px solid #e8efdd", minWidth: 130 }}>
-            <div style={{ fontSize: 11, color: "#647D00", fontFamily: "Poppins,sans-serif", fontWeight: 700 }}>🗺 ZONAGE — GABON</div>
-            <div style={{ fontSize: 10, color: "#888", marginTop: 2 }}>23 initiatives actives</div>
-            <div style={{ fontSize: 10, color: "#aaa", marginTop: 1 }}>{Object.values(activeZones).filter(Boolean).length} zones visibles</div>
+          <div className="mg-map-badge">
+            <div className="mg-map-badge-title">🗺 ZONAGE — GABON</div>
+            <div className="mg-map-badge-info">23 initiatives actives</div>
+            <div className="mg-map-badge-info-muted">{Object.values(activeZones).filter(Boolean).length} zones visibles</div>
           </div>
         </div>
       </div>
-      <div style={{ padding: "12px 16px", background: "#fff", borderTop: "1px solid #e8efdd", fontSize: 12, color: "#888", textAlign: "center" }}>
+      <div className="mg-map-footer">
         Cliquez sur un marqueur pour voir les détails · Cochez/décochez les zones dans le panneau
       </div>
     </div>
@@ -285,7 +285,7 @@ function Screen3() {
   return (
     <div>
       <div className="mg-resources-header">
-        <h2 style={{ fontFamily: "Poppins,sans-serif", color: "#fff", fontSize: 18, fontWeight: 700 }}>📚 Centre de Ressources</h2>
+        <h2 className="mg-resources-title">📚 Centre de Ressources</h2>
         <input
           className="mg-resources-search"
           placeholder="🔍  Rechercher une ressource..."
@@ -298,8 +298,8 @@ function Screen3() {
           {filtered.map((r) => (
             <div key={r.title} className="mg-res-card">
               <div className="mg-res-tag">{r.tag}</div>
-              <h4 style={{ fontFamily: "Poppins,sans-serif", fontSize: 13, fontWeight: 600, color: "#222", marginBottom: 4 }}>{r.title}</h4>
-              <p style={{ fontSize: 12, color: "#888", lineHeight: 1.4 }}>{r.desc}</p>
+              <h4 className="mg-res-card-title">{r.title}</h4>
+              <p className="mg-res-card-desc">{r.desc}</p>
               <div className="mg-res-arrow">Lire →</div>
             </div>
           ))}
@@ -321,23 +321,22 @@ function Screen4() {
   return (
     <div>
       <div className="mg-defis-header">
-        <h2 style={{ fontFamily: "Poppins,sans-serif", color: "#fff", fontSize: 18, fontWeight: 700 }}>🏆 Défis Mbolo Green</h2>
-        <p style={{ color: "rgba(255,255,255,0.7)", fontSize: 12, marginTop: 4 }}>Participez, gagnez des points et devenez Éco-Citoyen</p>
+        <h2 className="mg-defis-title">🏆 Défis Mbolo Green</h2>
+        <p className="mg-defis-subtitle">Participez, gagnez des points et devenez Éco-Citoyen</p>
       </div>
       <div className="mg-defis-body">
         {defis.map((d) => (
           <div key={d.title} className="mg-defi-card">
-            <div style={{ fontSize: 32, flexShrink: 0 }}>{d.icon}</div>
-            <div style={{ flex: 1 }}>
-              <h4 style={{ fontFamily: "Poppins,sans-serif", fontSize: 14, fontWeight: 600, color: "#222" }}>{d.title}</h4>
-              <p style={{ fontSize: 12, color: "#888", marginTop: 2 }}>{d.desc}</p>
+            <div className="mg-defi-icon">{d.icon}</div>
+            <div className="mg-defi-content">
+              <h4 className="mg-defi-title">{d.title}</h4>
+              <p className="mg-defi-desc">{d.desc}</p>
             </div>
-            <div style={{ textAlign: "center", flexShrink: 0 }}>
-              <div style={{ fontFamily: "Poppins,sans-serif", fontSize: 22, fontWeight: 700, color: "#647D00" }}>{d.pts}</div>
-              <div style={{ fontSize: 10, color: "#aaa", marginTop: -2 }}>Points</div>
+            <div className="mg-defi-meta">
+              <div className="mg-defi-points">{d.pts}</div>
+              <div className="mg-defi-points-label">Points</div>
               <button
-                className="mg-btn-participer"
-                style={joined[d.title] ? { background: "#aaa" } : {}}
+                className={joined[d.title] ? "mg-btn-participer mg-btn-participer-disabled" : "mg-btn-participer"}
                 onClick={() => setJoined((j) => ({ ...j, [d.title]: true }))}
               >
                 {joined[d.title] ? "Inscrit ✓" : "Participer"}
@@ -358,32 +357,31 @@ function Screen5() {
     <div>
       <div className="mg-profil-header">
         <div className="mg-avatar">RO</div>
-        <h2 style={{ fontFamily: "Poppins,sans-serif", color: "#fff", fontSize: 18, fontWeight: 700 }}>
+        <h2 className="mg-profil-title">
           Bonjour,{" "}
           {editing ? (
             <input
               autoFocus
+              placeholder="Votre nom"
               value={name}
               onChange={(e) => setName(e.target.value)}
               onBlur={() => setEditing(false)}
-              style={{ background: "transparent", border: "none", borderBottom: "1px solid #8BC343", color: "#fff", fontFamily: "Poppins,sans-serif", fontSize: 18, fontWeight: 700, outline: "none", width: 100 }}
+              className="mg-profile-name-input"
             />
           ) : (
-            <span onClick={() => setEditing(true)} style={{ cursor: "pointer", borderBottom: "1px dashed rgba(255,255,255,0.4)" }}>{name}</span>
+            <span onClick={() => setEditing(true)} className="mg-profile-name-label">{name}</span>
           )}
         </h2>
-        <p style={{ color: "rgba(255,255,255,0.7)", fontSize: 13 }}>Membre depuis Mars 2026</p>
-        <div style={{ marginTop: 16, background: "rgba(255,255,255,0.15)", borderRadius: 20, height: 10, overflow: "hidden" }}>
-          <div style={{ background: "#8BC343", height: "100%", borderRadius: 20, width: "78%" }} />
+        <p className="mg-profil-subtitle">Membre depuis Mars 2026</p>
+        <div className="mg-profile-progress">
+          <div className="mg-profile-progress-bar" />
         </div>
-        <div style={{ color: "#fff", fontFamily: "Poppins,sans-serif", fontSize: 13, fontWeight: 600, marginTop: 6 }}>
-          Score écologique : 78%
-        </div>
+        <div className="mg-profile-score">Score écologique : 78%</div>
       </div>
       <div className="mg-profil-body">
         <div className="mg-prof-section">
           <div className="mg-prof-section-title">Mes Badges</div>
-          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+          <div className="mg-badges-list">
             {["🏆 Éco-Citoyen", "🌳 Protecteur de la forêt", "♻️ Champion du recyclage"].map((b) => (
               <div key={b} className="mg-badge">{b}</div>
             ))}
@@ -405,15 +403,15 @@ function Screen5() {
         </div>
         <div className="mg-prof-section">
           <div className="mg-prof-section-title">Mes Statistiques</div>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8, textAlign: "center" }}>
+          <div className="mg-profile-stats-grid">
             {[
               { val: "3", label: "Défis terminés" },
               { val: "160", label: "Points" },
               { val: "3", label: "Badges" },
             ].map((s) => (
-              <div key={s.label} style={{ background: "#f0f7e0", borderRadius: 10, padding: "12px 6px" }}>
-                <div style={{ fontFamily: "Poppins,sans-serif", fontWeight: 700, fontSize: 18, color: "#647D00" }}>{s.val}</div>
-                <div style={{ fontSize: 10, color: "#888" }}>{s.label}</div>
+              <div key={s.label} className="mg-profile-stat-card">
+                <div className="mg-profile-stat-value">{s.val}</div>
+                <div className="mg-profile-stat-label">{s.label}</div>
               </div>
             ))}
           </div>
@@ -432,9 +430,9 @@ export default function App() {
         {/* Nav */}
         <nav className="mg-nav">
           <div className="mg-nav-logo">
-            <img src={logoImg} alt="Mbolo Green" style={{ width: 40, height: 40, objectFit: "contain", borderRadius: "50%" }} />
-            <span style={{ color: "#fff", fontFamily: "Poppins,sans-serif", fontWeight: 700, fontSize: 18 }}>
-              <span style={{ color: "#8BC343" }}>MBOLO</span>&nbsp;GREEN
+            <img src={logoImg} alt="Mbolo Green" className="mg-nav-logo-img" />
+            <span className="mg-nav-logo-text">
+              <span className="mg-nav-logo-brand">MBOLO</span>&nbsp;GREEN
             </span>
           </div>
           <div className="mg-nav-links">
